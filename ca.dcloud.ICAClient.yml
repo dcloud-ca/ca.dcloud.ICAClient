@@ -1,1 +1,199 @@
+app-id: ca.dcloud.Icaclient
+runtime: org.gnome.Platform
+runtime-version: '40'
+sdk: org.gnome.Sdk
+command: /bin/bash
+
+writable-sdk: true
+#sdk-extensions:
+  #- org.gnome.Sdk.Compat.i386
+
+finish-args:
+#  - --filesystem=home
+  - --device=all
+  - --share=ipc
+  - --share=network
+  - --socket=pulseaudio
+  - --socket=x11
+  - --env=ICAROOT=/home/adam/ICAClient/linuxx64
+  - --socket=wayland
+
+#add-extensions:
+  #org.gnome.Platform.Compat.i386:
+    #directory: lib/i386-linux-gnu
+    #version: '40'
+
+modules:
+
+  - name: gtk2
+    buildsystem: autotools
+    sources:
+       - type: archive
+         url: http://archive.ubuntu.com/ubuntu/pool/main/g/gtk+2.0/gtk+2.0_2.24.33.orig.tar.xz
+         sha256: ac2ac757f5942d318a311a54b0c80b5ef295f299c2a73c632f6bfb1ff49cc6da
+
+  #- name: libwebkit2gtk
+    #buildsystem: simple
+    #build-commands:
+       #- cmake -D PORT=GTK .
+    #sources:
+       #- type: archive
+         #url: http://archive.ubuntu.com/ubuntu/pool/main/w/webkit2gtk/webkit2gtk_2.32.0.orig.tar.xz
+         #sha256: 9d7df4dae9ada2394257565acc2a68ace9308c4c61c3fcc00111dc1f11076bf0
+                  
+  #- name: canberra-gtk
+    #buildsystem: autotools
+    #sources:
+       #- type: archive
+         #url: http://archive.ubuntu.com/ubuntu/pool/main/libc/libcanberra/libcanberra_0.30.orig.tar.xz
+         #sha256: c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72
+         
+  #- name: atk-bridge
+    #buildsystem: meson
+    #sources:
+       #- type: archive
+         #url: http://archive.ubuntu.com/ubuntu/pool/main/a/at-spi2-atk/at-spi2-atk_2.38.0.orig.tar.xz
+         #sha256: cfa008a5af822b36ae6287f18182c40c91dd699c55faa38605881ed175ca464f
+         
+  - name: libjson-c
+    buildsystem: cmake
+    sources:
+       - type: archive
+         url: http://archive.ubuntu.com/ubuntu/pool/main/j/json-c/json-c_0.15.orig.tar.gz
+         sha256: 4ba9a090a42cf1e12b84c64e4464bb6fb893666841d5843cc5bef90774028882
+
+  - name: libxerces-c
+    buildsystem: autotools
+    sources:
+       - type: archive
+         url: http://archive.ubuntu.com/ubuntu/pool/universe/x/xerces-c/xerces-c_3.2.3+debian.orig.tar.xz
+         sha256: 25652e6ed8a55e9273d6514f7e2744678b6d51f5d88c03d4219fac0310393f8d  
+         
+
+  #- name: perl
+    #buildsystem: simple
+    #build-commands:
+      #- |
+        #./Configure -desr -Dprefix=/app
+        #make
+        #make test
+        #PREFIX=/app make install
+    #sources:
+      #- type: archive
+        #url: http://archive.ubuntu.com/ubuntu/pool/main/p/perl/perl_5.32.1.orig.tar.xz
+        #sha256: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309
+
+
+  - name: perl
+    sources:
+      - type: archive
+        url: "http://www.cpan.org/src/5.0/perl-5.32.0.tar.gz"
+        sha256: efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4
+      - type: script
+        dest-filename: configure
+        commands:
+          - ./Configure -des -Dprefix=/app
+    post-install:
+      - "find /app/lib/perl5 -type f -exec chmod u+w {} \\;"
+        
+  - name: openssl
+    buildsystem: simple
+    build-commands:
+      - |
+        ./config --prefix=/app
+        make
+        make test
+        PREFIX=/app make install
+    sources:
+      - type: archive
+        url: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_1.1.1j.orig.tar.gz
+        sha256: aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf
+
+  #- name: gstreamer
+    #buildsystem: autotools
+    #sources:
+       #- type: archive
+         #url: https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.19.1.tar.xz
+         #sha256: 0bdf5395a6982ae8a20c568603892877437ce3e2d206bf9ab54de29ca417dcc1
+         
+  #- name: ca-certificates
+    #buildsystem: simple
+    #build-commands:
+      #- |
+        #sed -i s/"CERTSDIR =.*"/"CERTSDIR = app\/usr\/share\/ca-certificates"/ Makefile
+        #cat Makefile
+        #make all
+    #sources:
+       #- type: archive
+         #url: http://archive.ubuntu.com/ubuntu/pool/main/c/ca-certificates/ca-certificates_20210119build1.tar.xz
+         #sha256: f7f8e32fdbb980fbcd0dccd5c509284454c63db43182c627da0ee8cec6afaa27
+  - name: xvinfo
+    buildsystem: autotools
+    sources:
+       - type: archive
+         url: https://gitlab.freedesktop.org/xorg/app/xvinfo/-/archive/xvinfo-1.1.4/xvinfo-xvinfo-1.1.4.tar.gz
+         sha256: 39f2e6f6d578bb45e6bc4c0693d970406486d0f6a7b87b8662a9ee494db2a16f
+
+  #- name: binutils
+    #buildsystem: autotools
+    #sources:
+       #- type: archive
+         #url: https://ftp.wayne.edu/gnu/binutils/binutils-2.37.tar.xz
+         #sha256: 820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c
+  - name: gst-plugins-ugly
+    buildsystem: meson
+    sources:
+       - type: archive
+         url: https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.3.tar.xz
+         sha256: 403c21688065f41e53008874402b5c07832567cc1309a60df597eab7ff5843f0
+
+  - name: icaclient
+    buildsystem: simple
+    build-commands:
+      - |
+        mkdir -p /app/lib/i386-linux-gnu
+        mkdir -p /app/icaclient
+        cp -r * /app/icaclient
+        cd /app/icaclient
+        echo '#!/bin/bash' > /app/bin/citrix
+        echo 'export ICAROOT=/home/adam/.var/app/ca.dcloud.Icaclient/icaclient' >> /app/bin/citrix
+        echo 'if [[ ! -a /home/adam/.var/app/ca.dcloud.Icaclient/icaclient/selfservice ]]; then' >> /app/bin/citrix
+        echo '	echo -e "1\n/home/adam/.var/app/ca.dcloud.Icaclient/icaclient\ny\nn\nn\n3\n" | /app/icaclient/setupwfc' >> /app/bin/citrix
+        echo 'fi' >> /app/bin/citrix
+        echo '/home/adam/.var/app/ca.dcloud.icaclient/Icaclient/selfservice --icaroot /home/adam/.var/app/ca.dcloud.Icaclient/icaclient' >> /app/bin/citrix
+        chmod +x /app/bin/citrix
+    sources:
+      - type: archive
+        url: https://downloads.citrix.com/19702/linuxx64-21.6.0.28.tar.gz?__gda__=exp=1628837489~acl=/*~hmac=53e508c92e96f8ac1c4ca7e856aee91b5341b23e1f383afe83e555f5dc43a550
+        sha256: f3f98c60b0aaac31eb44dc98f22ee7ae7df229c960d5d29785eb5e9554f85f68
+
+  - name: HDXEngine
+    buildsystem: simple
+    build-commands:
+      - |
+        ls
+        unzip HDX_RealTime_Media_Engine_\*_for_Linux_x64.zip -d HDXEngine
+        cp -r HDXEngine/HDX*/* /app/icaclient
+        cd /app/icaclient/x86_64
+        chmod +x ../HDXRTME_install.sh
+        ar -x citrix-hdx-realtime-media-engine_*_amd64.deb
+        tar -xf data.tar.xz
+        cp /app/icaclient/x86_64/usr/local/bin/50-hid.rules /usr/lib/udev/rules.d/
+    sources:
+      - type: file
+        url: https://downloads.citrix.com/11922/HDX_RealTime_Media_Engine_2.9.400_for_Linux_x64.zip?__gda__=exp=1628975418~acl=/*~hmac=984ad94815754071ab1285cf623b3caf91921718ffbb8ba5ee1c134eafa30c3f
+        sha256: 796b2b3d080fa9e78babda473a074fa5be7b5214469e4fb5910fc270bff44241
+         
+        #cd /app/icaclient
+        #echo '#!/bin/bash' > /app/bin/citrix
+        #echo 'export ICAROOT=/home/adam/.var/app/ca.dcloud.icaclient/icaclient' >> /app/bin/citrix
+        #echo 'export LD_LIBRARY_PATH=/home/adam/.var/app/ca.dcloud.icaclient/icaclient/lib' >> /app/bin/citrix
+        #echo 'if [[ ! -a /home/adam/.var/app/ca.dcloud.icaclient/icaclient/selfservice ]]; then' >> /app/bin/citrix
+        #echo '	echo -e "1\n/home/adam/.var/app/ca.dcloud.icaclient/icaclient\ny\nn\nn\n3\n" | /app/icaclient/setupwfc' >> /app/bin/citrix
+        #echo '	/home/adam/.var/app/ca.dcloud.icaclient/icaclient/util/setlog' >> /app/bin/citrix
+        #echo '	/home/adam/.var/app/ca.dcloud.icaclient/icaclient/util/configmgr --icaroot /home/adam/.var/app/ca.dcloud.icaclient/icaclient' >> /app/bin/citrix
+        #echo 'fi' >> /app/bin/citrix
+        #echo '/home/adam/.var/app/ca.dcloud.icaclient/icaclient/selfservice --icaroot /home/adam/.var/app/ca.dcloud.icaclient/icaclient' >> /app/bin/citrix
+        #chmod +x /app/bin/citrix
+
 
