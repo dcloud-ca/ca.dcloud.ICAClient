@@ -15,8 +15,10 @@ finish-args:
   - --share=network
   - --socket=pulseaudio
   - --socket=x11
-  - --env=ICAROOT=/home/adam/ICAClient/linuxx64
+  - --env=ICAROOT=~/ICAClient/linuxx64
   - --socket=wayland
+  - --persist=ICAClient
+  - --persist=.ICAClient
 
 #add-extensions:
   #org.gnome.Platform.Compat.i386:
@@ -84,30 +86,30 @@ modules:
         #sha256: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309
 
 
-  - name: perl
-    sources:
-      - type: archive
-        url: "http://www.cpan.org/src/5.0/perl-5.32.0.tar.gz"
-        sha256: efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4
-      - type: script
-        dest-filename: configure
-        commands:
-          - ./Configure -des -Dprefix=/app
-    post-install:
-      - "find /app/lib/perl5 -type f -exec chmod u+w {} \\;"
+  # - name: perl
+  #   sources:
+  #     - type: archive
+  #       url: "http://www.cpan.org/src/5.0/perl-5.32.0.tar.gz"
+  #       sha256: efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4
+  #     - type: script
+  #       dest-filename: configure
+  #       commands:
+  #         - ./Configure -des -Dprefix=/app
+  #   post-install:
+  #     - "find /app/lib/perl5 -type f -exec chmod u+w {} \\;"
         
-  - name: openssl
-    buildsystem: simple
-    build-commands:
-      - |
-        ./config --prefix=/app
-        make
-        make test
-        PREFIX=/app make install
-    sources:
-      - type: archive
-        url: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_1.1.1j.orig.tar.gz
-        sha256: aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf
+  # - name: openssl
+  #   buildsystem: simple
+  #   build-commands:
+  #     - |
+  #       ./config --prefix=/app
+  #       make
+  #       make test
+  #       PREFIX=/app make install
+  #   sources:
+  #     - type: archive
+  #       url: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_1.1.1j.orig.tar.gz
+  #       sha256: aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf
 
   #- name: gstreamer
     #buildsystem: autotools
@@ -127,12 +129,12 @@ modules:
        #- type: archive
          #url: http://archive.ubuntu.com/ubuntu/pool/main/c/ca-certificates/ca-certificates_20210119build1.tar.xz
          #sha256: f7f8e32fdbb980fbcd0dccd5c509284454c63db43182c627da0ee8cec6afaa27
-  - name: xvinfo
-    buildsystem: autotools
-    sources:
-       - type: archive
-         url: https://gitlab.freedesktop.org/xorg/app/xvinfo/-/archive/xvinfo-1.1.4/xvinfo-xvinfo-1.1.4.tar.gz
-         sha256: 39f2e6f6d578bb45e6bc4c0693d970406486d0f6a7b87b8662a9ee494db2a16f
+  # - name: xvinfo
+  #   buildsystem: autotools
+  #   sources:
+  #      - type: archive
+  #        url: https://gitlab.freedesktop.org/xorg/app/xvinfo/-/archive/xvinfo-1.1.4/xvinfo-xvinfo-1.1.4.tar.gz
+  #        sha256: 39f2e6f6d578bb45e6bc4c0693d970406486d0f6a7b87b8662a9ee494db2a16f
 
   #- name: binutils
     #buildsystem: autotools
