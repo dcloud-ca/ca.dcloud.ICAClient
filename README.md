@@ -1,14 +1,14 @@
 # ca.dcloud.ICAClient
 Build and install the Citrix Workspace app + HDX RealTime Media Engine Skype as a Flatpak application
 
-#Disclaimer
+# Disclaimer
 This project and myself are not affiliated with Citrix. This project does not contain or distribute any Citrix software. When the flatpak is built, it iniates downloads from Citrix's site packages that they have made freely available.
 
-#Requirements
+# Requirements
 flatpak, flatpak-builder, elfutils, pulseaudio
 You should be able to install all of these through your distro's package manager.
 
-#Instructions
+# Instructions
 Clone/download this repo. Citrix seems to generate a unique download URL everytime you try to download the Workspace and HDX pacakges, so you'll have to go to the site and get you own unique URL.
 https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html
 Under Tarball packages, click on Download File button for x86_64. When your browser prompts you to download, click cancel (if it's set to automatically download you can just delete/cancel the download in progress), you have to do this to make the actual download link available. Now right-click on the Download File button and copy the link. You'll have to past the link into ca.dcloud.ICAClient.yml file that you downloaded as part of this repo. Open that file with a text editor and file the code block that starts with "name: icaclient", several lines down you'll see "url:", paste the link you copied there. Right beneath that is "sha256:". On the Citrix page, right under the Download File button is Checksums, copy the checksum starting after "SHA-256-" and paste it into the .yml file after "sha256:".
