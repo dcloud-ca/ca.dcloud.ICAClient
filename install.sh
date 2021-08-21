@@ -39,3 +39,5 @@ if [[ ! -d $HOME/ICAClient/linuxx64/rtme ]]; then
 fi
 
 $HOME/ICAClient/linuxx64/selfservice
+
+exit
