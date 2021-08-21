@@ -30,4 +30,4 @@ I have not tested this extensively by any means, not all features of Citrix Work
 
 ---  
 
-1 The reasong for the "flatpak kill" part is that launching Workspace starts a few background processes, which aren't stoppted simply by closing the Workspace app/exiting the flatpak. If you don't kill the flatpak (thereby killing those processes), if you try to launch it again Workspace will hang while loading. If you do get into a situation where it hangs, you can solve this be deleting ~/.var/app/ca.dcloud.ICAClient/.ICAClient. I hope to fix this and make things a little more elegant in the future.
+1 The reasong for the "flatpak kill" part is [this bug](https://github.com/dcloud-ca/ca.dcloud.ICAClient/issues/1)
