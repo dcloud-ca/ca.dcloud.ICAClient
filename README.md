@@ -25,7 +25,7 @@ Repeat the same process for the HDX RTME, in the .yml file it is the code block 
 
 Open a terminal in the folder where you downloaded this repo, and run the following:  
 *flatpak-builder --user --install --force-clean icaclient ca.dcloud.ICAClient.yml*  
-(If you're using a musl-based distribution, you may have to add the flag "--disable-rofiles-fuse" due to [this bug](https://github.com/flatpak/flatpak-builder/issues/329))  
+(If your distro uses musl libc rather than the tyipcal GNU libc, you may have to add the flag "--disable-rofiles-fuse" due to [this bug](https://github.com/flatpak/flatpak-builder/issues/329))  
 
 It will take some time to download and build. Once it is finished, launch the application by running<sup>1</sup>:  
 *flatpak run ca.dcloud.ICAClient && flatpak kill ca.dcloud.ICAClient*  
