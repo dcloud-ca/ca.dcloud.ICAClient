@@ -30,4 +30,4 @@ I have not tested this extensively by any means, not all features of Citrix Work
 
 ---  
 
-1 The reasong for the "flatpak kill" part is [this bug](https://github.com/dcloud-ca/ca.dcloud.ICAClient/issues/1)
+1 The reasonb for the "&& flatpak kill" part is [this bug](https://github.com/dcloud-ca/ca.dcloud.ICAClient/issues/1)
