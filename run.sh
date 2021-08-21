@@ -39,8 +39,5 @@ if [[ ! -d $HOME/ICAClient/linuxx64/rtme ]]; then
 fi
 
 $HOME/ICAClient/linuxx64/selfservice
-<<<<<<< HEAD:install.sh
 
 exit
-=======
->>>>>>> 86b641afff81f4fd15a7a4c3767d8289c84fd199:run.sh
