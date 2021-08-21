@@ -137,4 +137,4 @@ modules:
         chmod +x /app/icaclient/run.sh
     sources:
       - type: file
-        path: ./install.sh
+        path: ./run.sh
