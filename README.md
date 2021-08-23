@@ -27,13 +27,11 @@ Open a terminal in the folder where you downloaded this repo, and run the follow
 *flatpak-builder --user --install --force-clean icaclient ca.dcloud.ICAClient.yml*  
 (If your distro uses musl libc rather than the tyipcal GNU libc, you may have to add the flag "--disable-rofiles-fuse" due to [this bug](https://github.com/flatpak/flatpak-builder/issues/329))  
 
-It will take some time to download and build. Once it is finished, launch the application by running<sup>1</sup>:  
-*flatpak run ca.dcloud.ICAClient && flatpak kill ca.dcloud.ICAClient*  
+It will take some time to download and build. Once it is finished, it should be automatially added to your application launcher, if not you can launch it via:  
+*~/.local/share/flatpak/exports/share/applications/ca.dcloud.ICAClient.desktop*  
+Or launch it via command line:  
+*flatpak run ca.dcloud.ICAClient*  
 The first time you start the flatpak it will run some install scripts before launching Workspace.  
 
 ## Notes
 I have not tested this extensively by any means, not all features of Citrix Workspace may work, or work stably. So far I've basically only used it to connect to my workstation via Remote PC, and verified that Skype works when doing so. If you find a feature that doesn't work please raise a bug.
-
----  
-
-1 The reason for the "&& flatpak kill [...]" part is [this bug](https://github.com/dcloud-ca/ca.dcloud.ICAClient/issues/1)
