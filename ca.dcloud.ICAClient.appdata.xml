@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>ca.dcloud.ICAClient</id>
+    <launchable type="desktop-id">ca.dcloud.ICAClient.desktop</launchable>
+    <metadata_license>CC0-1.0</metadata_license>
+    <name>Citrix</name>
+    <summary>Citrix Workspace + HDX RTME Flatpak</summary>
+    <description>
+        <p>This is a community package of the Citrix Workspace app, plus HDX RealTime Media Engine for Skype, not officially supported by Citrix. Report bugs through linked issue tracker.</p>
+        <p>Citrix is a virtual desktop infrastructure (VDI) provider</p>
+        <p>This version of Citrix Workspace runs in a flatpak container.</p>
+    </description>
+    <categories>
+        <category>Network</category>
+        <category>Office</category>
+    </categories>
+    <url type="homepage">https://github.com/dcloud-ca/ca.dcloud.ICAClient/issues</url>
+    <url type="help">https://github.com/dcloud-ca/ca.dcloud.ICAClient#readme</url>
+    <url type="bugtracker">https://github.com/dcloud-ca/ca.dcloud.ICAClient/issues</url>
+    <project_license>LicenseRef-proprietary</project_license>
+    <developer_name>Citrix Systems Inc.</developer_name>
+    <releases>
+        <release version="0.1" date="2021-08-22" type="development"/>
+    </releases>
+    <provides>
+        <mediatype>application/x-ica</mediatype>
+        <mediatype>application/vnd.citrix.receiver.configure</mediatype>
+    </provides>
+    <agreement type="eula">
+        <agreement_section type="License">
+            <name>CITRIX LICENSE AGREEMENT</name>
+            <description>
+                <p>
+                    Use of this component is subject to the Citrix license or terms of service covering the Citrix product(s) and/or service(s) with which you will be using this component. This component is licensed for use only with such Citrix product(s) and/or service(s).
+                    CTX_code EP_T_A10352779
+                </p>
+            </description>
+        </agreement_section>
+    </agreement>
+</component>

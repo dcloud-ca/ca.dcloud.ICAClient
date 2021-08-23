@@ -2,7 +2,7 @@ app-id: ca.dcloud.ICAClient
 runtime: org.gnome.Platform
 runtime-version: '40'
 sdk: org.gnome.Sdk
-command: /app/icaclient/run.sh
+command: /app/bin/run.sh
 
 finish-args:
   - --device=all
@@ -10,7 +10,7 @@ finish-args:
   - --share=network
   - --socket=pulseaudio
   - --socket=x11
-  - --env=ICAROOT=~/ICAClient/linuxx64
+  - --env=ICAROOT=$HOME/ICAClient/linuxx64
   - --socket=wayland
   - --persist=.
   - --persist=ICAClient
@@ -63,7 +63,7 @@ modules:
     buildsystem: simple
     build-commands:
        - |
-         ./configure --prefix=/app --with-pkcs11-config=/app/usr/share/p11-kit/modules --with-pkcs11-modules=/app/usr/share/p11-kit/modules
+         ./configure --prefix=/app --with-pkcs11-config=/app/share/p11-kit/modules --with-pkcs11-modules=/app/share/p11-kit/modules
          make
          make install
     sources:
@@ -109,16 +109,19 @@ modules:
       - |
         mkdir -p /app/icaclient
         cp -r * /app/icaclient
+        mkdir -p /app/share/icons/hicolor/64x64/apps
+        cp /app/icaclient/linuxx64/linuxx64.cor/icons/000_Receiver_64.png /app/share/icons/hicolor/64x64/apps/ca.dcloud.ICAClient.png
+        mkdir -p /app/share/icons/hicolor/256x256/apps
+        cp /app/icaclient/linuxx64/linuxx64.cor/icons/receiver.png /app/share/icons/hicolor/256x256/apps/ca.dcloud.ICAClient.png
     sources:
       - type: archive
-        url: 
+        url: https://downloads.citrix.com/19785/linuxx64-21.8.0.40.tar.gz?__gda__=exp=1629678036~acl=/*~hmac=4195d02903314527b6e92038687f3296b32d19aa436328a590ad1568a9677bf7
         sha256: 69ddae29cc8b4b68341c3d9503a54ee70ab58a5795fd83e79573f013eda5518c #checksum is for Workspace 2108 Linux x86_64 tarball
 
   - name: HDX-RTME
     buildsystem: simple
     build-commands:
       - |
-        ls
         unzip HDX_RealTime_Media_Engine_\*_for_Linux_x64.zip -d HDX-RTME
         cp -r HDX-RTME/HDX*/* /app/icaclient
         cd /app/icaclient/x86_64
@@ -126,15 +129,37 @@ modules:
         tar -xf data.tar.xz
     sources:
       - type: file
-        url: 
+        url: https://downloads.citrix.com/11922/HDX_RealTime_Media_Engine_2.9.400_for_Linux_x64.zip?__gda__=exp=1629678068~acl=/*~hmac=85e4c1b0718d6c8b2b964c7c42a972b40b2fdbae7792b1d887530d5115f37629
         sha256: 796b2b3d080fa9e78babda473a074fa5be7b5214469e4fb5910fc270bff44241  #checksum is for HDX RTME 2.9.400 for Linux x64 .zip
 
   - name: Run-script
     buildsystem: simple
     build-commands:
       - |
-        cp ./run.sh /app/icaclient
-        chmod +x /app/icaclient/run.sh
+        cp ./run.sh /app/bin/
+        chmod +x /app/bin/run.sh
     sources:
       - type: file
-        path: ./run.sh
+        path: ./run.sh  
+
+  - name: Appdata-xml
+    buildsystem: simple
+    build-commands:
+      - |
+        mkdir -p /app/share/metainfo
+        cp ./ca.dcloud.ICAClient.appdata.xml /app/share/metainfo/
+        appstream-util validate-relax /app/share/metainfo/ca.dcloud.ICAClient.appdata.xml
+    sources:
+      - type: file
+        path: ./ca.dcloud.ICAClient.appdata.xml
+
+  - name: Desktop-file
+    buildsystem: simple
+    build-commands:
+      - |
+        mkdir -p /app/share/applications
+        cp ./ca.dcloud.ICAClient.desktop /app/share/applications/
+        desktop-file-validate /app/share/applications/ca.dcloud.ICAClient.desktop
+    sources:
+      - type: file
+        path: ./ca.dcloud.ICAClient.desktop

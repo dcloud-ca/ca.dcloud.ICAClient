@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Citrix
+Comment=Citrix Workspace + HDX RTME Flatpak
+Exec=/app/bin/run.sh
+Icon=ca.dcloud.ICAClient
+Terminal=false
+Type=Application
+Categories=Network;Office;
+MimeType=application/x-ica;application/vnd.citrix.receiver.configure;

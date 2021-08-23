@@ -38,6 +38,15 @@ if [[ ! -d $HOME/ICAClient/linuxx64/rtme ]]; then
     rm -rf ./new_module.ini
 fi
 
+$HOME/ICAClient/linuxx64/util/ctxlogd
 $HOME/ICAClient/linuxx64/selfservice
+
+if [[ ! -z $(ps -e | grep UtilDaemon) ]]; then
+    pkill --signal 9 UtilDaemon
+fi
+
+for process in AuthManagerDaem ServiceRecord ctxlogd; do
+    pkill $process
+done
 
 exit
