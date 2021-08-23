@@ -2,7 +2,7 @@
 Build and install the Citrix Workspace app (ICAClient) + HDX RealTime Media Engine for Skype as a Flatpak application for Linux.
 
 ## Disclaimer
-This project and I are not affiliated with Citrix. This project does not contain or distribute any Citrix software. When the flatpak is built, it iniates downloads from Citrix's site of packages that they have made freely available.
+This project and I are not affiliated with Citrix. This project does not contain any Citrix software. When the user builds the Flatpak application using this template, the required packages are obtained from Citrix's website, where Citrix has made the installers available for download.
 
 ## Requirements
 flatpak, flatpak-builder, elfutils, pulseaudio  
