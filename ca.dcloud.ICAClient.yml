@@ -5,19 +5,19 @@ sdk: org.gnome.Sdk
 command: /app/bin/run.sh
 
 finish-args:
-  - --device=all
-  - --share=ipc
+  - --device=all  #For webcam/microphone access. Future work will be to remove this permission, and replace with a more restrictive one for those devices only
   - --share=network
   - --socket=pulseaudio
-  - --socket=x11
-  - --env=ICAROOT=$HOME/ICAClient/linuxx64
+  - --socket=x11 
+  - --share=ipc #Required for X11 to work properly
+  - --env=ICAROOT=$HOME/ICAClient/linuxx64 
   - --socket=wayland
-  - --persist=.
-  - --persist=ICAClient
-  - --persist=.ICAClient
+  - --persist=. #Gives the app a persistent that is treated as the home directory, located at ~/.var/app/ca.dcloud.ICAClient
+  - --persist=ICAClient #Installation directory (relative to the Flatpak container home folder)
+  - --persist=.ICAClient #Log/config directory (relative to the Flatpak container home folder)
 
-modules:
-  - name: gtk2
+modules: #Requirements as per Citrix's site, that aren't included in the Flatpak runtime. https://docs.citrix.com/en-us/citrix-workspace-app-for-linux/system-requirements.html
+  - name: gtk2  
     buildsystem: autotools
     sources:
        - type: archive
@@ -31,21 +31,21 @@ modules:
          #url: http://archive.ubuntu.com/ubuntu/pool/main/a/at-spi2-atk/at-spi2-atk_2.38.0.orig.tar.xz
          #sha256: cfa008a5af822b36ae6287f18182c40c91dd699c55faa38605881ed175ca464f
 
-  - name: libjson-c
+  - name: libjson-c #Listed as a requirement "for instrumentation", not sure what that refers to
     buildsystem: cmake
     sources:
        - type: archive
          url: http://archive.ubuntu.com/ubuntu/pool/main/j/json-c/json-c_0.15.orig.tar.gz
          sha256: 4ba9a090a42cf1e12b84c64e4464bb6fb893666841d5843cc5bef90774028882
 
-  - name: libxerces-c
+  - name: libxerces-c #Listed as a requirement for the self-service UI
     buildsystem: autotools
     sources:
        - type: archive
          url: http://archive.ubuntu.com/ubuntu/pool/universe/x/xerces-c/xerces-c_3.2.3+debian.orig.tar.xz
          sha256: 25652e6ed8a55e9273d6514f7e2744678b6d51f5d88c03d4219fac0310393f8d  
 
-  - name: gst-plugins-ugly
+  - name: gst-plugins-ugly  #Listed as requirement for HDX RT video compression and MediaStream Windows media redirection
     buildsystem: meson
     sources:
        - type: archive
@@ -59,7 +59,7 @@ modules:
   #        url: http://archive.ubuntu.com/ubuntu/pool/main/libc/libcanberra/libcanberra_0.30.orig.tar.xz
   #        sha256: c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72   
 
-  - name: gnome-keyring
+  - name: gnome-keyring #Listed as a requirement for Service Continuity
     buildsystem: simple
     build-commands:
        - |
