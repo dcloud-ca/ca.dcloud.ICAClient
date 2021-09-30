@@ -14,7 +14,7 @@
         <category>Network</category>
         <category>Office</category>
     </categories>
-    <url type="homepage">https://github.com/dcloud-ca/ca.dcloud.ICAClient/issues</url>
+    <url type="homepage">https://github.com/dcloud-ca/ca.dcloud.ICAClient</url>
     <url type="help">https://github.com/dcloud-ca/ca.dcloud.ICAClient#readme</url>
     <url type="bugtracker">https://github.com/dcloud-ca/ca.dcloud.ICAClient/issues</url>
     <project_license>LicenseRef-proprietary</project_license>
