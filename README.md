@@ -23,7 +23,7 @@ It will take some time to download and build. Once it is finished, it should be 
 *~/.local/share/flatpak/exports/share/applications/ca.dcloud.ICAClient.desktop*  
 Or launch it via command line:  
 *flatpak run ca.dcloud.ICAClient*  
-The first time you start the flatpak it will run some install scripts before launching Workspace.  
+The first time you start the flatpak it will run some install scripts in the background, before launching Workspace.  
 
 ## Notes
 I have not tested this extensively by any means, not all features of Citrix Workspace may work, or work stably. So far I've basically only used it to connect to my workstation via Remote PC, and verified that Skype works when doing so. If you find a feature that doesn't work please raise a bug.
