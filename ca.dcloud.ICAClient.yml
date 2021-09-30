@@ -20,9 +20,6 @@ finish-args:
   - --persist=ICAClient #Installation directory (relative to the Flatpak container home folder)
   - --persist=.ICAClient #Log/config directory (relative to the Flatpak container home folder)
 
-cleanup:
-  - /app/tmp
-
 modules: #Requirements as per Citrix's site, that aren't included in the Flatpak runtime. https://docs.citrix.com/en-us/citrix-workspace-app-for-linux/system-requirements.html
   - name: gtk2  
     buildsystem: autotools
@@ -114,7 +111,7 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
   #Downloads the installer archives for Workspace and HDX-RTME. The download links are dynamic, so they can't be hardcoded into this manifest. They have to be obtained by scraping the Citrix downloads page every time
   #Unzips the Workspace and HDX-RTME archives into the app directory
   #Copies Citrix icons to the folders where flatpak expects them, to be used as app icons.
-  - name: bootstrap 
+  - name: bootstrap
     buildsystem: simple
     build-commands:
       - |
@@ -122,19 +119,19 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
         chmod +x /app/bin/run.sh
 
         mkdir -p /app/tmp
-        wget $(wget -O - https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html | sed -ne '/linuxx64.*tar.gz/ s/<a .* rel="\(.*\)" id="downloadcomponent">/https:\1/p' | sed -e 's/\r//g') -O /app/tmp/linuxx64.tar.gz
+        wget $(wget -O - https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html | sed -ne '/linuxx64.*tar.gz/ s/<a .* rel="\(.*\)" id="downloadcomponent">/https:\1/p' | sed -e 's/\r//g') -O /tmp/linuxx64.tar.gz
         tempURL=$(wget -O - https://www.citrix.com/downloads/workspace-app/additional-client-software/hdx-realtime-media-engine.html | grep -m 1 -e 'rel="https.*hdx-realtime-media-engine-.*html"' | sed -ne 's/<a .* rel="\(.*\)" id="downloadcomponent.*">/\1/p')
-        wget $(wget -O - $tempURL | sed -ne '/HDX.*zip/ s/<a .* rel="\(.*\)" id="downloadcomponent_3">/https:\1/p' | sed -e 's/\r//g') -O /app/tmp/hdx.zip
+        wget $(wget -O - $tempURL | sed -ne '/HDX.*zip/ s/<a .* rel="\(.*\)" id="downloadcomponent_3">/https:\1/p' | sed -e 's/\r//g') -O /tmp/hdx.zip
 
         mkdir -p /app/icaclient
-        tar -zxf /app/tmp/linuxx64.tar.gz --directory=/app/icaclient
+        tar -zxf /tmp/linuxx64.tar.gz --directory=/app/icaclient
         mkdir -p /app/share/icons/hicolor/64x64/apps
         cp /app/icaclient/linuxx64/linuxx64.cor/icons/000_Receiver_64.png /app/share/icons/hicolor/64x64/apps/ca.dcloud.ICAClient.png
         mkdir -p /app/share/icons/hicolor/256x256/apps
         cp /app/icaclient/linuxx64/linuxx64.cor/icons/receiver.png /app/share/icons/hicolor/256x256/apps/ca.dcloud.ICAClient.png
 
-        unzip /app/tmp/hdx.zip -d /app/tmp/HDX-RTME
-        cp -r /app/tmp/HDX-RTME/HDX*/* /app/icaclient
+        unzip /tmp/hdx.zip -d /tmp/HDX-RTME
+        cp -r /tmp/HDX-RTME/HDX*/* /app/icaclient
         cd /app/icaclient/x86_64
         ar -x citrix-hdx-realtime-media-engine_*_amd64.deb
         tar -xf data.tar.xz
