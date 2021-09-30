@@ -4,6 +4,10 @@ runtime-version: '40'
 sdk: org.gnome.Sdk
 command: /app/bin/run.sh
 
+build-options:
+  build-args:
+    - --share=network
+
 finish-args:
   - --device=all  #For webcam/microphone access. Future work will be to remove this permission, and replace with a more restrictive one for those devices only
   - --share=network
@@ -16,6 +20,9 @@ finish-args:
   - --persist=ICAClient #Installation directory (relative to the Flatpak container home folder)
   - --persist=.ICAClient #Log/config directory (relative to the Flatpak container home folder)
 
+cleanup:
+  - /app/tmp
+
 modules: #Requirements as per Citrix's site, that aren't included in the Flatpak runtime. https://docs.citrix.com/en-us/citrix-workspace-app-for-linux/system-requirements.html
   - name: gtk2  
     buildsystem: autotools
@@ -24,12 +31,12 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
          url: http://archive.ubuntu.com/ubuntu/pool/main/g/gtk+2.0/gtk+2.0_2.24.33.orig.tar.xz
          sha256: ac2ac757f5942d318a311a54b0c80b5ef295f299c2a73c632f6bfb1ff49cc6da         
    
-  #- name: atk-bridge
-    #buildsystem: meson
-    #sources:
-       #- type: archive
-         #url: http://archive.ubuntu.com/ubuntu/pool/main/a/at-spi2-atk/at-spi2-atk_2.38.0.orig.tar.xz
-         #sha256: cfa008a5af822b36ae6287f18182c40c91dd699c55faa38605881ed175ca464f
+  # - name: atk-bridge
+  #   buildsystem: meson
+  #   sources:
+  #      - type: archive
+  #        url: http://archive.ubuntu.com/ubuntu/pool/main/a/at-spi2-atk/at-spi2-atk_2.38.0.orig.tar.xz
+  #        sha256: cfa008a5af822b36ae6287f18182c40c91dd699c55faa38605881ed175ca464f
 
   - name: libjson-c #Listed as a requirement "for instrumentation", not sure what that refers to
     buildsystem: cmake
@@ -103,44 +110,77 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
          #url: https://ftp.wayne.edu/gnu/binutils/binutils-2.37.tar.xz
          #sha256: 820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c
 
-  - name: ICAClient
+  #Copies the launch/initial setup script from this project to the app directory.
+  #Downloads the installer archives for Workspace and HDX-RTME. The download links are dynamic, so they can't be hardcoded into this manifest. They have to be obtained by scraping the Citrix downloads page every time
+  #Unzips the Workspace and HDX-RTME archives into the app directory
+  #Copies Citrix icons to the folders where flatpak expects them, to be used as app icons.
+  - name: bootstrap 
     buildsystem: simple
     build-commands:
       - |
+        cp ./run.sh /app/bin/ 
+        chmod +x /app/bin/run.sh
+
+        mkdir -p /app/tmp
+        wget $(wget -O - https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html | sed -ne '/linuxx64.*tar.gz/ s/<a .* rel="\(.*\)" id="downloadcomponent">/https:\1/p' | sed -e 's/\r//g') -O /app/tmp/linuxx64.tar.gz
+        tempURL=$(wget -O - https://www.citrix.com/downloads/workspace-app/additional-client-software/hdx-realtime-media-engine.html | grep -m 1 -e 'rel="https.*hdx-realtime-media-engine-.*html"' | sed -ne 's/<a .* rel="\(.*\)" id="downloadcomponent.*">/\1/p')
+        wget $(wget -O - $tempURL | sed -ne '/HDX.*zip/ s/<a .* rel="\(.*\)" id="downloadcomponent_3">/https:\1/p' | sed -e 's/\r//g') -O /app/tmp/hdx.zip
+
         mkdir -p /app/icaclient
-        cp -r * /app/icaclient
+        tar -zxf /app/tmp/linuxx64.tar.gz --directory=/app/icaclient
         mkdir -p /app/share/icons/hicolor/64x64/apps
         cp /app/icaclient/linuxx64/linuxx64.cor/icons/000_Receiver_64.png /app/share/icons/hicolor/64x64/apps/ca.dcloud.ICAClient.png
         mkdir -p /app/share/icons/hicolor/256x256/apps
         cp /app/icaclient/linuxx64/linuxx64.cor/icons/receiver.png /app/share/icons/hicolor/256x256/apps/ca.dcloud.ICAClient.png
-    sources:
-      - type: archive
-        url: https://downloads.citrix.com/19785/linuxx64-21.8.0.40.tar.gz?__gda__=exp=1629678036~acl=/*~hmac=4195d02903314527b6e92038687f3296b32d19aa436328a590ad1568a9677bf7
-        sha256: 69ddae29cc8b4b68341c3d9503a54ee70ab58a5795fd83e79573f013eda5518c #checksum is for Workspace 2108 Linux x86_64 tarball
 
-  - name: HDX-RTME
-    buildsystem: simple
-    build-commands:
-      - |
-        unzip HDX_RealTime_Media_Engine_\*_for_Linux_x64.zip -d HDX-RTME
-        cp -r HDX-RTME/HDX*/* /app/icaclient
+        unzip /app/tmp/hdx.zip -d /app/tmp/HDX-RTME
+        cp -r /app/tmp/HDX-RTME/HDX*/* /app/icaclient
         cd /app/icaclient/x86_64
         ar -x citrix-hdx-realtime-media-engine_*_amd64.deb
         tar -xf data.tar.xz
     sources:
       - type: file
-        url: https://downloads.citrix.com/11922/HDX_RealTime_Media_Engine_2.9.400_for_Linux_x64.zip?__gda__=exp=1629678068~acl=/*~hmac=85e4c1b0718d6c8b2b964c7c42a972b40b2fdbae7792b1d887530d5115f37629
-        sha256: 796b2b3d080fa9e78babda473a074fa5be7b5214469e4fb5910fc270bff44241  #checksum is for HDX RTME 2.9.400 for Linux x64 .zip
+        path: ./run.sh
 
-  - name: Run-script
-    buildsystem: simple
-    build-commands:
-      - |
-        cp ./run.sh /app/bin/
-        chmod +x /app/bin/run.sh
-    sources:
-      - type: file
-        path: ./run.sh  
+  # - name: ICAClient
+  #   buildsystem: simple
+  #   build-commands:
+  #     - |
+  #       gunzip /app/tmp/linuxx64.tar.gz
+  #       mkdir -p /app/icaclient
+  #       cp -r /app/tmp/* /app/icaclient
+  #       mkdir -p /app/share/icons/hicolor/64x64/apps
+  #       cp /app/icaclient/linuxx64/linuxx64.cor/icons/000_Receiver_64.png /app/share/icons/hicolor/64x64/apps/ca.dcloud.ICAClient.png
+  #       mkdir -p /app/share/icons/hicolor/256x256/apps
+  #       cp /app/icaclient/linuxx64/linuxx64.cor/icons/receiver.png /app/share/icons/hicolor/256x256/apps/ca.dcloud.ICAClient.png
+  #   sources:
+  #     - type: file
+  #       path: /app/tmp/linuxx64.tar.gz
+  #       sha256: d58d5cbbcb5ace95b75b1400061d475b8e72dbdf5f03abacea6d39686991f848 #checksum is for Workspace 2109 Linux x86_64 tarball
+
+  # - name: HDX-RTME
+  #   buildsystem: simple
+  #   build-commands:
+  #     - |
+  #       unzip HDX_RealTime_Media_Engine_\*_for_Linux_x64.zip -d HDX-RTME
+  #       cp -r HDX-RTME/HDX*/* /app/icaclient
+  #       cd /app/icaclient/x86_64
+  #       ar -x citrix-hdx-realtime-media-engine_*_amd64.deb
+  #       tar -xf data.tar.xz
+  #   sources:
+  #     - type: file
+  #       url: https://downloads.citrix.com/11922/HDX_RealTime_Media_Engine_2.9.400_for_Linux_x64.zip?__gda__=exp=1629678068~acl=/*~hmac=85e4c1b0718d6c8b2b964c7c42a972b40b2fdbae7792b1d887530d5115f37629
+  #       sha256: 796b2b3d080fa9e78babda473a074fa5be7b5214469e4fb5910fc270bff44241  #checksum is for HDX RTME 2.9.400 for Linux x64 .zip
+
+  # - name: Run-script
+  #   buildsystem: simple
+  #   build-commands:
+  #     - |
+  #       cp ./run.sh /app/bin/
+  #       chmod +x /app/bin/run.sh
+  #   sources:
+  #     - type: file
+  #       path: ./run.sh  
 
   - name: Appdata-xml
     buildsystem: simple
