@@ -115,29 +115,31 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
     buildsystem: simple
     build-commands:
       - |
-        cp ./run.sh /app/bin/ 
-        chmod +x /app/bin/run.sh
+        cp ./install.sh /app/bin/ 
+        chmod +x /app/bin/install.sh
 
-        mkdir -p /app/tmp
         wget $(wget -O - https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html | sed -ne '/linuxx64.*tar.gz/ s/<a .* rel="\(.*\)" id="downloadcomponent">/https:\1/p' | sed -e 's/\r//g') -O /tmp/linuxx64.tar.gz
         tempURL=$(wget -O - https://www.citrix.com/downloads/workspace-app/additional-client-software/hdx-realtime-media-engine.html | grep -m 1 -e 'rel="https.*hdx-realtime-media-engine-.*html"' | sed -ne 's/<a .* rel="\(.*\)" id="downloadcomponent.*">/\1/p')
         wget $(wget -O - $tempURL | sed -ne '/HDX.*zip/ s/<a .* rel="\(.*\)" id="downloadcomponent_3">/https:\1/p' | sed -e 's/\r//g') -O /tmp/hdx.zip
 
-        mkdir -p /app/icaclient
-        tar -zxf /tmp/linuxx64.tar.gz --directory=/app/icaclient
+        mkdir -p /tmp/icaclient
+        tar -zxf /tmp/linuxx64.tar.gz --directory=/tmp/icaclient
         mkdir -p /app/share/icons/hicolor/64x64/apps
-        cp /app/icaclient/linuxx64/linuxx64.cor/icons/000_Receiver_64.png /app/share/icons/hicolor/64x64/apps/ca.dcloud.ICAClient.png
+        cp /tmp/icaclient/linuxx64/linuxx64.cor/icons/000_Receiver_64.png /app/share/icons/hicolor/64x64/apps/ca.dcloud.ICAClient.png
         mkdir -p /app/share/icons/hicolor/256x256/apps
-        cp /app/icaclient/linuxx64/linuxx64.cor/icons/receiver.png /app/share/icons/hicolor/256x256/apps/ca.dcloud.ICAClient.png
+        cp /tmp/icaclient/linuxx64/linuxx64.cor/icons/receiver.png /app/share/icons/hicolor/256x256/apps/ca.dcloud.ICAClient.png
 
         unzip /tmp/hdx.zip -d /tmp/HDX-RTME
-        cp -r /tmp/HDX-RTME/HDX*/* /app/icaclient
-        cd /app/icaclient/x86_64
+        cp -r /tmp/HDX-RTME/HDX*/* /tmp/icaclient
+        cd /tmp/icaclient/x86_64
         ar -x citrix-hdx-realtime-media-engine_*_amd64.deb
         tar -xf data.tar.xz
+
+        /app/bin/install.sh
+
     sources:
       - type: file
-        path: ./run.sh
+        path: ./install.sh
 
   # - name: ICAClient
   #   buildsystem: simple
@@ -169,15 +171,15 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
   #       url: https://downloads.citrix.com/11922/HDX_RealTime_Media_Engine_2.9.400_for_Linux_x64.zip?__gda__=exp=1629678068~acl=/*~hmac=85e4c1b0718d6c8b2b964c7c42a972b40b2fdbae7792b1d887530d5115f37629
   #       sha256: 796b2b3d080fa9e78babda473a074fa5be7b5214469e4fb5910fc270bff44241  #checksum is for HDX RTME 2.9.400 for Linux x64 .zip
 
-  # - name: Run-script
-  #   buildsystem: simple
-  #   build-commands:
-  #     - |
-  #       cp ./run.sh /app/bin/
-  #       chmod +x /app/bin/run.sh
-  #   sources:
-  #     - type: file
-  #       path: ./run.sh  
+  - name: Run-script
+    buildsystem: simple
+    build-commands:
+      - |
+        cp ./run.sh /app/bin/
+        chmod +x /app/bin/run.sh
+    sources:
+      - type: file
+        path: ./run.sh  
 
   - name: Appdata-xml
     buildsystem: simple
