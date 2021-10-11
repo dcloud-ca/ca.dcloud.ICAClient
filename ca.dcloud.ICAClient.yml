@@ -14,10 +14,9 @@ finish-args:
   - --socket=pulseaudio
   - --socket=x11 
   - --share=ipc #Required for X11 to work properly
-  - --env=ICAROOT=$HOME/ICAClient/linuxx64 
+  - --env=ICAROOT=/app/ICAClient/linuxx64 
   - --socket=wayland
   - --persist=. #Gives the app a persistent that is treated as the home directory, located at ~/.var/app/ca.dcloud.ICAClient
-  - --persist=ICAClient #Installation directory (relative to the Flatpak container home folder)
   - --persist=.ICAClient #Log/config directory (relative to the Flatpak container home folder)
 
 modules: #Requirements as per Citrix's site, that aren't included in the Flatpak runtime. https://docs.citrix.com/en-us/citrix-workspace-app-for-linux/system-requirements.html
@@ -28,6 +27,8 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
          url: http://archive.ubuntu.com/ubuntu/pool/main/g/gtk+2.0/gtk+2.0_2.24.33.orig.tar.xz
          sha256: ac2ac757f5942d318a311a54b0c80b5ef295f299c2a73c632f6bfb1ff49cc6da         
    
+    #When the app is launched on Ubuntu (Gnome 38), it complains about being unable to find the atk-bridge module. However, everything seems to still work fine without it.
+    #This package seems to be related to an accessibility features interface (AT-SPI), so it's possible that there are some accessibility features that may not work without this module installed
   # - name: atk-bridge
   #   buildsystem: meson
   #   sources:
@@ -109,14 +110,14 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
 
   #Copies the launch/initial setup script from this project to the app directory.
   #Downloads the installer archives for Workspace and HDX-RTME. The download links are dynamic, so they can't be hardcoded into this manifest. They have to be obtained by scraping the Citrix downloads page every time
-  #Unzips the Workspace and HDX-RTME archives into the app directory
+  #Performs Citrix install as per the install.sh script
   #Copies Citrix icons to the folders where flatpak expects them, to be used as app icons.
   - name: bootstrap
     buildsystem: simple
     build-commands:
       - |
-        cp ./install.sh /app/bin/ 
-        chmod +x /app/bin/install.sh
+        cp ./install.sh /tmp 
+        chmod +x /tmp/install.sh
 
         wget $(wget -O - https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html | sed -ne '/linuxx64.*tar.gz/ s/<a .* rel="\(.*\)" id="downloadcomponent">/https:\1/p' | sed -e 's/\r//g') -O /tmp/linuxx64.tar.gz
         tempURL=$(wget -O - https://www.citrix.com/downloads/workspace-app/additional-client-software/hdx-realtime-media-engine.html | grep -m 1 -e 'rel="https.*hdx-realtime-media-engine-.*html"' | sed -ne 's/<a .* rel="\(.*\)" id="downloadcomponent.*">/\1/p')
@@ -135,7 +136,7 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
         ar -x citrix-hdx-realtime-media-engine_*_amd64.deb
         tar -xf data.tar.xz
 
-        /app/bin/install.sh
+        /tmp/install.sh
 
     sources:
       - type: file
