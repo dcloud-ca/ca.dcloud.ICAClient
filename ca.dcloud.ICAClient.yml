@@ -1,6 +1,6 @@
 app-id: ca.dcloud.ICAClient
 runtime: org.gnome.Platform
-runtime-version: '40'
+runtime-version: '41'
 sdk: org.gnome.Sdk
 command: /app/bin/run.sh
 
@@ -54,8 +54,8 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
     buildsystem: meson
     sources:
        - type: archive
-         url: https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.3.tar.xz
-         sha256: 403c21688065f41e53008874402b5c07832567cc1309a60df597eab7ff5843f0
+         url: https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.19.3.tar.xz
+         sha256: d49a10a9e87c554f2630527a5d2f924c0f55de4300106e80341fe8f9737c06e9
 
   # - name: canberra-gtk
   #   buildsystem: autotools
@@ -73,8 +73,8 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
          make install
     sources:
        - type: archive
-         url: http://archive.ubuntu.com/ubuntu/pool/main/g/gnome-keyring/gnome-keyring_3.36.0.orig.tar.xz
-         sha256: a264b57a8d1a71fdf0d66e8cd6033d013fb828be279c35766545eb9bb3734f87
+         url: http://archive.ubuntu.com/ubuntu/pool/main/g/gnome-keyring/gnome-keyring_40.0.orig.tar.xz
+         sha256: a3d24db08ee2fdf240fbbf0971a98c8ee295aa0e1a774537f4ea938038a3b931
 
   # - name: perl
   #   sources:
