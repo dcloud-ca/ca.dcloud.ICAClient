@@ -54,8 +54,8 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
     buildsystem: meson
     sources:
        - type: archive
-         url: https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.19.3.tar.xz
-         sha256: d49a10a9e87c554f2630527a5d2f924c0f55de4300106e80341fe8f9737c06e9
+         url: https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.18.5.tar.xz
+         sha256: df32803e98f8a9979373fa2ca7e05e62f977b1097576d3a80619d9f5c69f66d9
 
   # - name: canberra-gtk
   #   buildsystem: autotools
