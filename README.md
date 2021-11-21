@@ -12,8 +12,8 @@ You should be able to install all of these through your distro's package manager
 Perform the [flatpak setup](https://flatpak.org/setup/).  
 Add the flathub remote, and install the Gnome SDK and runtime:  
 *flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo  
-flatpak install --user flathub org.gnome.Platform  
-flatpak install --user flathub org.gnome.Sdk*
+flatpak install --user flathub org.gnome.Platform//41  
+flatpak install --user flathub org.gnome.Sdk//41*
 
 Clone/download this repo. Open a terminal in the folder where you downloaded this repo, and run the following:  
 *flatpak-builder --user --install --force-clean icaclient ca.dcloud.ICAClient.yml*  

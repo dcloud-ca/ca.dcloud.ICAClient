@@ -26,15 +26,6 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
        - type: archive
          url: http://archive.ubuntu.com/ubuntu/pool/main/g/gtk+2.0/gtk+2.0_2.24.33.orig.tar.xz
          sha256: ac2ac757f5942d318a311a54b0c80b5ef295f299c2a73c632f6bfb1ff49cc6da         
-   
-    #When the app is launched on Ubuntu (Gnome 38), it complains about being unable to find the atk-bridge module. However, everything seems to still work fine without it.
-    #This package seems to be related to an accessibility features interface (AT-SPI), so it's possible that there are some accessibility features that may not work without this module installed
-  # - name: atk-bridge
-  #   buildsystem: meson
-  #   sources:
-  #      - type: archive
-  #        url: http://archive.ubuntu.com/ubuntu/pool/main/a/at-spi2-atk/at-spi2-atk_2.38.0.orig.tar.xz
-  #        sha256: cfa008a5af822b36ae6287f18182c40c91dd699c55faa38605881ed175ca464f
 
   - name: libjson-c #Listed as a requirement "for instrumentation", not sure what that refers to
     buildsystem: cmake
@@ -57,13 +48,6 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
          url: https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.18.5.tar.xz
          sha256: df32803e98f8a9979373fa2ca7e05e62f977b1097576d3a80619d9f5c69f66d9
 
-  # - name: canberra-gtk
-  #   buildsystem: autotools
-  #   sources:
-  #      - type: archive
-  #        url: http://archive.ubuntu.com/ubuntu/pool/main/libc/libcanberra/libcanberra_0.30.orig.tar.xz
-  #        sha256: c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72   
-
   - name: gnome-keyring #Listed as a requirement for Service Continuity
     buildsystem: simple
     build-commands:
@@ -75,38 +59,6 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
        - type: archive
          url: http://archive.ubuntu.com/ubuntu/pool/main/g/gnome-keyring/gnome-keyring_40.0.orig.tar.xz
          sha256: a3d24db08ee2fdf240fbbf0971a98c8ee295aa0e1a774537f4ea938038a3b931
-
-  # - name: perl
-  #   sources:
-  #     - type: archive
-  #       url: "http://www.cpan.org/src/5.0/perl-5.32.0.tar.gz"
-  #       sha256: efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4
-  #     - type: script
-  #       dest-filename: configure
-  #       commands:
-  #         - ./Configure -des -Dprefix=/app
-  #   post-install:
-  #     - "find /app/lib/perl5 -type f -exec chmod u+w {} \\;"
-        
-  # - name: openssl
-  #   buildsystem: simple
-  #   build-commands:
-  #     - |
-  #       ./config --prefix=/app
-  #       make
-  #       make test
-  #       PREFIX=/app make install
-  #   sources:
-  #     - type: archive
-  #       url: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_1.1.1j.orig.tar.gz
-  #       sha256: aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf
-
-  #- name: binutils
-    #buildsystem: autotools
-    #sources:
-       #- type: archive
-         #url: https://ftp.wayne.edu/gnu/binutils/binutils-2.37.tar.xz
-         #sha256: 820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c
 
   #Copies the launch/initial setup script from this project to the app directory.
   #Downloads the installer archives for Workspace and HDX-RTME. The download links are dynamic, so they can't be hardcoded into this manifest. They have to be obtained by scraping the Citrix downloads page every time
@@ -142,35 +94,53 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
       - type: file
         path: ./install.sh
 
-  # - name: ICAClient
+  #When the app is launched on Ubuntu (Gnome 38), it complains about being unable to find the atk-bridge module. However, everything seems to still work fine without it.
+  #This package seems to be related to an accessibility features interface (AT-SPI), so it's possible that there are some accessibility features that may not work without this module installed
+  # - name: atk-bridge
+  #   buildsystem: meson
+  #   sources:
+  #      - type: archive
+  #        url: http://archive.ubuntu.com/ubuntu/pool/main/a/at-spi2-atk/at-spi2-atk_2.38.0.orig.tar.xz
+  #        sha256: cfa008a5af822b36ae6287f18182c40c91dd699c55faa38605881ed175ca464f
+  #
+  # - name: canberra-gtk
+  #   buildsystem: autotools
+  #   sources:
+  #      - type: archive
+  #        url: http://archive.ubuntu.com/ubuntu/pool/main/libc/libcanberra/libcanberra_0.30.orig.tar.xz
+  #        sha256: c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72   
+  #
+  # - name: perl
+  #   sources:
+  #     - type: archive
+  #       url: "http://www.cpan.org/src/5.0/perl-5.32.0.tar.gz"
+  #       sha256: efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4
+  #     - type: script
+  #       dest-filename: configure
+  #       commands:
+  #         - ./Configure -des -Dprefix=/app
+  #   post-install:
+  #     - "find /app/lib/perl5 -type f -exec chmod u+w {} \\;"
+  #     
+  # - name: openssl
   #   buildsystem: simple
   #   build-commands:
   #     - |
-  #       gunzip /app/tmp/linuxx64.tar.gz
-  #       mkdir -p /app/icaclient
-  #       cp -r /app/tmp/* /app/icaclient
-  #       mkdir -p /app/share/icons/hicolor/64x64/apps
-  #       cp /app/icaclient/linuxx64/linuxx64.cor/icons/000_Receiver_64.png /app/share/icons/hicolor/64x64/apps/ca.dcloud.ICAClient.png
-  #       mkdir -p /app/share/icons/hicolor/256x256/apps
-  #       cp /app/icaclient/linuxx64/linuxx64.cor/icons/receiver.png /app/share/icons/hicolor/256x256/apps/ca.dcloud.ICAClient.png
+  #       ./config --prefix=/app
+  #       make
+  #       make test
+  #       PREFIX=/app make install
   #   sources:
-  #     - type: file
-  #       path: /app/tmp/linuxx64.tar.gz
-  #       sha256: d58d5cbbcb5ace95b75b1400061d475b8e72dbdf5f03abacea6d39686991f848 #checksum is for Workspace 2109 Linux x86_64 tarball
-
-  # - name: HDX-RTME
-  #   buildsystem: simple
-  #   build-commands:
-  #     - |
-  #       unzip HDX_RealTime_Media_Engine_\*_for_Linux_x64.zip -d HDX-RTME
-  #       cp -r HDX-RTME/HDX*/* /app/icaclient
-  #       cd /app/icaclient/x86_64
-  #       ar -x citrix-hdx-realtime-media-engine_*_amd64.deb
-  #       tar -xf data.tar.xz
-  #   sources:
-  #     - type: file
-  #       url: https://downloads.citrix.com/11922/HDX_RealTime_Media_Engine_2.9.400_for_Linux_x64.zip?__gda__=exp=1629678068~acl=/*~hmac=85e4c1b0718d6c8b2b964c7c42a972b40b2fdbae7792b1d887530d5115f37629
-  #       sha256: 796b2b3d080fa9e78babda473a074fa5be7b5214469e4fb5910fc270bff44241  #checksum is for HDX RTME 2.9.400 for Linux x64 .zip
+  #     - type: archive
+  #       url: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_1.1.1j.orig.tar.gz
+  #       sha256: aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf
+  #
+  #- name: binutils
+    #buildsystem: autotools
+    #sources:
+       #- type: archive
+         #url: https://ftp.wayne.edu/gnu/binutils/binutils-2.37.tar.xz
+         #sha256: 820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c
 
   - name: Run-script
     buildsystem: simple

@@ -3,7 +3,7 @@
     <id>ca.dcloud.ICAClient</id>
     <launchable type="desktop-id">ca.dcloud.ICAClient.desktop</launchable>
     <metadata_license>CC0-1.0</metadata_license>
-    <name>Citrix</name>
+    <name>Citrix Workspace</name>
     <summary>Citrix Workspace + HDX RTME Flatpak</summary>
     <description>
         <p>This is a community package of the Citrix Workspace app, plus HDX RealTime Media Engine for Skype, not officially supported by Citrix. Report bugs through linked issue tracker.</p>
