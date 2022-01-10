@@ -5,9 +5,6 @@ sed -ie 's/DefaultInstallDir=.*$/DefaultInstallDir=\/app\/ICAClient\/linuxx64/' 
 #The installation options selected below answer yes to using the gstreamer pluging from ICAClient. The "app protection component" and USB support
 #require the installer to be run as root, so they cannot be installed in this case.
 echo -e "1\n\ny\ny\n3\n" | /tmp/icaclient/setupwfc
-cd /app/ICAClient/linuxx64
-ln -s /usr/share/ca-certificates/mozilla/* keystore/cacerts/
-util/ctx_rehash keystore/cacerts/
 
 #HDX RTME requires some directories for storing settings, log, and version info. These directories aren't persistant
 #so they get recreated everytime the Flatpak is run. I haven't observed any negative effects from settings being wiped every time the app closes.
@@ -24,7 +21,7 @@ mkdir rtme
 cp /tmp/icaclient/x86_64/usr/local/bin/HDXRTME.so .
 chmod +x HDXRTME.so
 cp /tmp/icaclient/x86_64/usr/local/bin/* rtme
-MODULE_INI=config/module.ini
+MODULE_INI=config/module.iniflatpak
 if [ -L "$MODULE_INI" ] ; then
     MODULE_INI=$(readlink -f "$MODULE_INI")
 fi

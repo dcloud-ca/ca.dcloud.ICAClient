@@ -24,5 +24,8 @@ It will take some time to download sources and build. Once it is finished, it sh
 Or launch it via command line:  
 *flatpak run ca.dcloud.ICAClient*  
 
+## Updating
+When you build the app, it will automatically grab the most recent versions of Workspace and HDX RTME. Therefore, if Citrix has published new verions you can update your flatpak app by simply re-running the *flatpak-builder* command listed above.
+
 ## Notes
 I have not tested this extensively by any means, not all features of Citrix Workspace may work, or work stably. So far I've basically only used it to connect to my workstation via Remote PC, and verified that Skype works when doing so. If you find a feature that doesn't work please raise a bug.

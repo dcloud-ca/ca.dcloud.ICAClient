@@ -64,6 +64,7 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
   #Downloads the installer archives for Workspace and HDX-RTME. The download links are dynamic, so they can't be hardcoded into this manifest. They have to be obtained by scraping the Citrix downloads page every time
   #Performs Citrix install as per the install.sh script
   #Copies Citrix icons to the folders where flatpak expects them, to be used as app icons.
+
   - name: bootstrap
     buildsystem: simple
     build-commands:
@@ -89,6 +90,9 @@ modules: #Requirements as per Citrix's site, that aren't included in the Flatpak
         tar -xf data.tar.xz
 
         /tmp/install.sh
+
+        ln -s /etc/ssl/certs/*.pem /app/ICAClient/linuxx64/keystore/cacerts/
+        /app/ICAClient/linuxx64/util/ctx_rehash /app/ICAClient/linuxx64/keystore/cacerts/
 
     sources:
       - type: file
