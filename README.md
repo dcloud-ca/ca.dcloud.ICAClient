@@ -1,6 +1,10 @@
 # ca.dcloud.ICAClient
 Build and install the Citrix Workspace app (ICAClient) + HDX RealTime Media Engine for Skype as a Flatpak application for Linux.
 
+# 🚨 Project not receiving maintenance
+
+Shortly after creating this project, I stopped requiring the use of Citrix Workspace for my job. I stopped maintaining this shortly after (~Jan 2022). If anyone is interested please feel free to fork this and continue work on it.
+
 ## Disclaimer
 This project and I are not affiliated with Citrix. This repository does not contain any Citrix software. When the user builds the Flatpak application using this template, the required packages are obtained from Citrix's website, where Citrix has made the installers available for download.
 
@@ -28,4 +32,4 @@ Or launch it via command line:
 When you build the app, it will automatically grab the most recent versions of Workspace and HDX RTME. Therefore, if Citrix has published new verions you can update your flatpak app by simply re-running the *flatpak-builder* command listed above. However, you may need to empty the .flatpack-builder folder (located in the folder where you previously built the app), as Flatpak may see the build manifest hasn't changed and therefore use the cached files from the previous build, rather than re-downloading and grabbing the latest installers.
 
 ## Notes
-I have not tested this extensively by any means, not all features of Citrix Workspace may work, or work stably. So far I've basically only used it to connect to my workstation via Remote PC, and verified that Skype works when doing so. If you find a feature that doesn't work please raise a bug.
+I have not tested this extensively by any means, not all features of Citrix Workspace may work, or work stably. So far I've basically only used it to connect to my workstation via Remote PC, and verified that Skype works when doing so.
