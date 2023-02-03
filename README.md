@@ -3,7 +3,7 @@ Build and install the Citrix Workspace app (ICAClient) + HDX RealTime Media Engi
 
 # 🚨 Project not receiving maintenance
 
-Shortly after creating this project, I stopped requiring the use of Citrix Workspace for my job. I stopped maintaining this shortly after (~Jan 2022). If anyone is interested please feel free to fork this and continue work on it.
+Shortly after creating this project, I stopped requiring the use of Citrix Workspace for my job. I stopped maintaining this shortly after (~Jan 2022). I  may eventually archive this repo. But if anyone is interested please feel free to fork and continue work on it.
 
 ## Disclaimer
 This project and I are not affiliated with Citrix. This repository does not contain any Citrix software. When the user builds the Flatpak application using this template, the required packages are obtained from Citrix's website, where Citrix has made the installers available for download.
